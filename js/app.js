@@ -31,11 +31,13 @@
 		this.blockCount = blockCount;	
 		this.blocks = [];
 		this.lastClickedIndex = false;
+		this.clickCount = 0;
 	}
 	
 	App.prototype = {
 	
 		init:function(){
+			this.countLabel = new CountLabel();
 			var me = this;
 			var randtype = new RandType(this.blockCount / 2);
 			var block_click_handler = function(index){
@@ -46,7 +48,6 @@
 				this.blocks.push(new Block(i,type,block_click_handler));	
 			}
 			this.addBlocks();
-			this.reset();
 		}
 	
 		,addBlocks:function(){
@@ -56,10 +57,14 @@
 		}
 	
 		,reset:function(){
-	
+			this.blocks = [];	
+			$("ul.deck").html("");
+			this.init();
+			this.countLabel.show("");
 		}
 	
 		,blockClicked:function(index){
+			this.countLabel.show(++this.clickCount);
 			if(this.lastClickedIndex === false){
 				this.lastClickedIndex = index;	
 				return ;
@@ -92,6 +97,9 @@
 	$(function(){
 		var app = new App(16);	
 		app.init();
+		$("#reset").click(function(){
+			app.reset();
+		});
 	});
 	
 

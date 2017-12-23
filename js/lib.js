@@ -1,5 +1,16 @@
 ;;;(function(out){
 
+	var CountLabel = function(){
+	}
+
+	CountLabel.prototype = {
+
+		show:function(count){
+			$("#clickCount").html(count);	
+		}
+	}
+
+
 	var BLOCK_STATE = {
 		CLOSE:0,
 		OPEN:1,
@@ -63,5 +74,6 @@
 	};
 
 	out.Block = Block;
+	out.CountLabel = CountLabel;
 
 })(window);

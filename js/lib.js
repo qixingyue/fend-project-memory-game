@@ -60,8 +60,11 @@
 			if(this.state == BLOCK_STATE.MATCH){
 				this.dom.unbind("click");	
 			}
+
 			if(this.state == BLOCK_STATE.OPEN){
 				this.dom.animateCss('flipInX');	
+			} else if(this.state == BLOCK_STATE.CLOSE) {
+				this.dom.animateCss('flipInY');	
 			}
 		}
 	

@@ -81,10 +81,16 @@
 				block_a.match();	
 				block_b.match();	
 			} else {
-				block_a.back();	
-				block_b.back();	
+				this.delay(function(){
+					block_a.back();	
+					block_b.back();	
+				});
 			}
 			this.lastClickedIndex = false;
+		}
+
+		,delay:function(callback){
+			setTimeout(callback,500);	
 		}
 
 	}

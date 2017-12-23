@@ -50,7 +50,7 @@
 					class_name += "";
 					break;
 				case BLOCK_STATE.OPEN:
-					class_name += "show open animated flipInX";
+					class_name += "show open";
 					break;
 				case BLOCK_STATE.MATCH:
 					class_name += "show match";
@@ -59,6 +59,9 @@
 			this.dom.attr("class",class_name);
 			if(this.state == BLOCK_STATE.MATCH){
 				this.dom.unbind("click");	
+			}
+			if(this.state == BLOCK_STATE.OPEN){
+				this.dom.animateCss('flipInX');	
 			}
 		}
 	

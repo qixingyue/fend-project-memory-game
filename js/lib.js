@@ -50,7 +50,7 @@
 					class_name += "";
 					break;
 				case BLOCK_STATE.OPEN:
-					class_name += "show open";
+					class_name += "show open animated flipInX";
 					break;
 				case BLOCK_STATE.MATCH:
 					class_name += "show match";
@@ -77,3 +77,20 @@
 	out.CountLabel = CountLabel;
 
 })(window);
+
+
+
+//使用animate.css组件完成其中的动画
+$.fn.extend({
+    animateCss: function (animationName, callback) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        this.addClass('animated ' + animationName).one(animationEnd, function() {
+            $(this).removeClass('animated ' + animationName);
+            if (callback) {
+              callback();
+            }
+        });
+        return this;
+    }
+});
+

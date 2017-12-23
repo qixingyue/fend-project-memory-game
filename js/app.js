@@ -47,7 +47,9 @@
 				var type = randtype.random();
 				this.blocks.push(new Block(i,type,block_click_handler));	
 			}
-			this.addBlocks();
+			$("ul.deck").animateCss('lightSpeedIn',function(){
+				me.addBlocks();
+			});
 		}
 	
 		,addBlocks:function(){

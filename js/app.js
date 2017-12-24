@@ -37,18 +37,20 @@
 		this.blocks = [];
 		this.lastClickedIndex = false;
 		this.clickCount = 0;
+		this.leftCount = 0;
 	}
 	
 	App.prototype = {
 	
 		init:function(){
 			this.clickCount = 0;
+			this.leftCount = this.blockCount;
 			this.countLabel = new CountLabel();
 			var me = this;
 			var block_click_handler = function(index){
 				me.blockClicked(index);	
 			}
-			var icon_types = this.makeTypes(16);
+			var icon_types = this.makeTypes(this.blockCount);
 			for(var i = 0 ; i < this.blockCount; i++){
 				//随机元素加入到面板中
 				var index = Math.floor(Math.random() * icon_types.length);
@@ -97,6 +99,7 @@
 			if(block_a.type == block_b.type){
 				block_a.match();	
 				block_b.match();	
+				this.leftCount -= 2;
 			} else {
 				this.delay(function(){
 					block_a.back();	
@@ -104,6 +107,23 @@
 				});
 			}
 			this.lastClickedIndex = false;
+			this.finished();
+		}
+
+		,finished:function(){
+			var me = this;
+			if(this.leftCount == 0){
+				swal({
+  					title: "恭喜，恭喜",
+  					text: "恭喜您顺利完成了游戏，一定还想再玩一局吧!",
+  					icon: "success",
+  					button:'再来一局!'
+				}).then(function(result){
+					if(result){
+						me.reset();	
+					}
+				});
+			}
 		}
 
 		,delay:function(callback){
@@ -114,7 +134,6 @@
 	
 	
 	$(function(){
-		//swal("Good job!", "You clicked the button!", "success");
 		var app = new App(16);	
 		app.init();
 		$("#reset").click(function(){

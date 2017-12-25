@@ -65,6 +65,7 @@ h1 {
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
 }
 
+
 .deck .card.open {
     transform: rotateY(0);
     background: #02b3e4;
@@ -106,4 +107,9 @@ h1 {
 .score-panel .restart {
     float: right;
     cursor: pointer;
+}
+
+.score-panel .timer {
+	margin-left:25px;
+	font-size: 18px;
 }

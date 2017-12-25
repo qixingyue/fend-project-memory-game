@@ -1,5 +1,37 @@
 ;;;(function(out){
 
+	var RandType = function(count){
+		this.types = [
+			"diamond","eye","cloud","heartbeat","plane","rocket","send","wifi","flag","id-card",
+			"magic","phone","tag","tint","tv","signing","usd","rmb",
+			"eraser","file","table","scissors","link","copy","play"
+		];	
+		this.count = count;
+		this.now_types = [];
+		this.xpop = false;
+	}
+
+	RandType.prototype = {
+		
+		random:function(){
+			if(this.xpop || this.now_types.length ===  this.count  ){
+				this.xpop = true;
+				return this.randPop();
+			} else {
+				var index = Math.floor(Math.random() * this.types.length);
+				var type = this.types.splice(index,1)[0];
+				this.now_types.push(type);
+				return type;
+			}
+		}
+
+		,randPop:function(){
+			var index = Math.floor(Math.random() * this.now_types.length);
+			return this.now_types.splice(index,1)[0];
+		}
+	
+	}
+
 	var CountLabel = function(){
 	}
 
@@ -9,7 +41,43 @@
 			$("#clickCount").html(count);	
 		}
 	}
+	
+	var TimerLabel = function(){
+		this.timer = null;
+		this.elapsed = 0;
+		this.dom = $("#elapsedCount");
+	}
 
+	TimerLabel.prototype = {
+
+		start:function(){
+			var me = this;
+			var callback = function(){
+				me.tick();	
+			}
+			this.dom.html("00:00");
+			this.timer = setInterval(callback,1000);
+		}
+
+		,clear:function(){
+			clearInterval(this.timer);	
+		}
+
+		,tick:function(){
+			this.elapsed++;	
+			this.show();
+		}
+
+		,show:function(){
+			var minute = Math.floor( this.elapsed / 60 ); 	
+			var seconds = this.elapsed - minute * 60 ;
+			var minute_str = ( minute < 10 ) ? ( "0" + minute ) : ( minute ) ;
+			var seconds_str = (seconds < 10 ) ? ("0" + seconds ) : (seconds);
+			var time_str = minute_str + ":" + seconds_str;
+			this.dom.html(time_str);
+		}
+	
+	}
 
 	var BLOCK_STATE = {
 		CLOSE:0,
@@ -57,8 +125,10 @@
 					break;
 			}
 			this.dom.attr("class",class_name);
-			if(this.state == BLOCK_STATE.MATCH){
+			if(this.state != BLOCK_STATE.CLOSE){
 				this.dom.unbind("click");	
+			} else {
+				this.bind_event();	
 			}
 
 			if(this.state == BLOCK_STATE.OPEN){
@@ -81,6 +151,8 @@
 
 	out.Block = Block;
 	out.CountLabel = CountLabel;
+	out.TimerLabel = TimerLabel;
+	out.RandType = RandType;
 
 })(window);
 

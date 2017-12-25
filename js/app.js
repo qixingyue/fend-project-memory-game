@@ -1,49 +1,18 @@
 ;;;(function(out){
-
-	var RandType = function(count){
-		this.types = [
-			"diamond","eye","cloud","heartbeat","plane","rocket","send","wifi","flag","id-card",
-			"magic","phone","tag","tint","tv","signing","usd","rmb",
-			"eraser","file","table","scissors","link","copy","play"
-		];	
-		this.count = count;
-		this.now_types = [];
-		this.xpop = false;
-	}
-
-	RandType.prototype = {
-		
-		random:function(){
-			if(this.xpop || this.now_types.length ==  this.count  ){
-				this.xpop = true;
-				return this.randPop();
-			} else {
-				var index = Math.floor(Math.random() * this.types.length);
-				var type = this.types.splice(index,1)[0];
-				this.now_types.push(type);
-				return type;
-			}
-		}
-
-		,randPop:function(){
-			var index = Math.floor(Math.random() * this.now_types.length);
-			return this.now_types.splice(index,1)[0];
-		}
 	
-	}
-
 	var App = function(blockCount){
 		this.blockCount = blockCount;	
 		this.blocks = [];
 		this.lastClickedIndex = false;
-		this.clickCount = 0;
+		this.moveCount = 0;
 		this.leftCount = 0;
+		this.tl = new TimerLabel();
 	}
 	
 	App.prototype = {
 	
 		init:function(){
-			this.clickCount = 0;
+			this.moveCount = 0;
 			this.leftCount = this.blockCount;
 			this.countLabel = new CountLabel();
 			var me = this;
@@ -51,15 +20,15 @@
 				me.blockClicked(index);	
 			}
 			var icon_types = this.makeTypes(this.blockCount);
+			var index,type;
 			for(var i = 0 ; i < this.blockCount; i++){
 				//随机元素加入到面板中
-				var index = Math.floor(Math.random() * icon_types.length);
-				var type = icon_types.splice(index,1)[0];
+				index = Math.floor(Math.random() * icon_types.length);
+				type = icon_types.splice(index,1)[0];
 				this.blocks.push(new Block(i,type,block_click_handler));	
 			}
-			$("ul.deck").animateCss('lightSpeedIn',function(){
-				me.addBlocks();
-			});
+			me.addBlocks();
+			me.tl.start();	
 		}
 
 		,makeTypes:function(size){
@@ -80,12 +49,12 @@
 		,reset:function(){
 			this.blocks = [];	
 			$("ul.deck").html("");
-			this.init();
 			this.countLabel.show("");
+			this.tl.clear();
+			this.init();
 		}
 	
 		,blockClicked:function(index){
-			this.countLabel.show(++this.clickCount);
 			if(this.lastClickedIndex === false){
 				this.lastClickedIndex = index;	
 				return ;
@@ -96,23 +65,25 @@
 		,matchTwoBlock:function(a,b){
 			var block_a = this.blocks[a];
 			var block_b = this.blocks[b];
+			this.lastClickedIndex = false;
 			if(block_a.type == block_b.type){
+				this.countLabel.show(++this.moveCount);
 				block_a.match();	
 				block_b.match();	
 				this.leftCount -= 2;
+				this.finished();
 			} else {
 				this.delay(function(){
 					block_a.back();	
 					block_b.back();	
 				});
 			}
-			this.lastClickedIndex = false;
-			this.finished();
 		}
 
 		,finished:function(){
 			var me = this;
 			if(this.leftCount == 0){
+				this.tl.clear();
 				swal({
   					title: "恭喜，恭喜",
   					text: "恭喜您顺利完成了游戏，一定还想再玩一局吧!",

@@ -7,11 +7,13 @@
 		this.moveCount = 0;
 		this.leftCount = 0;
 		this.tl = new TimerLabel();
+		this.sl = new StarLabel(4);
 	}
 	
 	App.prototype = {
 	
 		init:function(){
+			this.sl.init();
 			this.moveCount = 0;
 			this.leftCount = this.blockCount;
 			this.countLabel = new CountLabel();
@@ -66,8 +68,13 @@
 			var block_a = this.blocks[a];
 			var block_b = this.blocks[b];
 			this.lastClickedIndex = false;
+			this.countLabel.show(++this.moveCount);
+			if(this.moveCount % 10 === 0) {
+				if(this.sl.consume() === 0){
+					this.failed();	
+				}
+			}
 			if(block_a.type == block_b.type){
-				this.countLabel.show(++this.moveCount);
 				block_a.match();	
 				block_b.match();	
 				this.leftCount -= 2;
@@ -86,7 +93,7 @@
 				this.tl.clear();
 				swal({
   					title: "恭喜，恭喜",
-  					text: "恭喜您顺利完成了游戏，一定还想再玩一局吧!",
+  					text: "恭喜您顺利完成了游戏，一定还想再玩一局吧! \n耗时 " + this.tl.dom.html() + "\n获得的星级: " + this.sl.left,
   					icon: "success",
   					button:'再来一局!'
 				}).then(function(result){
@@ -95,6 +102,21 @@
 					}
 				});
 			}
+		}
+
+		,failed:function(){
+			var me = this;
+			this.tl.clear();
+			swal({
+				title: "很遗憾",
+				text: "非常遗憾，您未能完成游戏，重来一局吧!",
+				icon: "warning",
+				button:'重来一局!'
+			}).then(function(result){
+				if(result){
+					me.reset();	
+				}
+			});
 		}
 
 		,delay:function(callback){

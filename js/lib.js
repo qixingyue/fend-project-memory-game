@@ -1,5 +1,26 @@
 ;;;(function(out){
 
+	var StarLabel = function(number){
+		this.dom = $('#starLabel');		
+		this.number = number;
+		this.left = number;
+	}
+
+	StarLabel.prototype = {
+		init:function(){
+			this.dom.html("");
+			for(var i = 0 ; i < this.number; i++){
+				this.dom.append('<li><i class="fa fa-star"></i></li>');	
+			}
+		}
+		,consume:function(){
+			this.left--;
+			this.dom.find('li:last').remove();
+			return this.left;
+		}
+	
+	}
+
 	var RandType = function(count){
 		this.types = [
 			"diamond","eye","cloud","heartbeat","plane","rocket","send","wifi","flag","id-card",
@@ -61,6 +82,7 @@
 
 		,clear:function(){
 			clearInterval(this.timer);	
+			this.elapsed = 0;
 		}
 
 		,tick:function(){
@@ -153,6 +175,7 @@
 	out.CountLabel = CountLabel;
 	out.TimerLabel = TimerLabel;
 	out.RandType = RandType;
+	out.StarLabel = StarLabel;
 
 })(window);
 

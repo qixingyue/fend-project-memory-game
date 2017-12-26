@@ -91,6 +91,19 @@
 			var me = this;
 			if(this.leftCount == 0){
 				this.tl.clear();
+
+				/***
+				***
+				自定义弹出来的内容
+				swal({
+			      content: {
+			        element: "div",
+			        attributes: {
+			            innerHTML:"<b>ONE</b>"
+			        }
+			      }
+				});
+				*/
 				swal({
   					title: "恭喜，恭喜",
   					text: "恭喜您顺利完成了游戏，一定还想再玩一局吧! \n耗时 " + this.tl.dom.html() + "\n获得的星级: " + this.sl.left,

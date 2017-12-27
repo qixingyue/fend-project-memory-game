@@ -92,23 +92,25 @@
 			if(this.leftCount == 0){
 				this.tl.clear();
 
-				/***
-				***
-				自定义弹出来的内容
+				var star_html = '';
+				for( var i = 0 ; i < this.sl.left ; i++) {
+					star_html += '<i class="fa fa-star"></i>';
+				}
+
+				var success_html = '<p>恭喜您顺利完成了游戏，一定还想再玩一局吧!</p><p>本局耗时' + 
+        							this.tl.dom.html() + '</p>' + 
+        							'<p>获得的星级:&nbsp;&nbsp;' + star_html + '</p>';
+
 				swal({
-			      content: {
-			        element: "div",
-			        attributes: {
-			            innerHTML:"<b>ONE</b>"
-			        }
-			      }
-				});
-				*/
-				swal({
-  					title: "恭喜，恭喜",
-  					text: "恭喜您顺利完成了游戏，一定还想再玩一局吧! \n耗时 " + this.tl.dom.html() + "\n获得的星级: " + this.sl.left,
-  					icon: "success",
-  					button:'再来一局!'
+				    title:'恭喜，恭喜！',
+				    icon:'success',
+				    content:{
+				        element:'div',
+				        attributes:{
+				            innerHTML:success_html
+				        },
+				    },
+				    button:'再来一局'
 				}).then(function(result){
 					if(result){
 						me.reset();	
